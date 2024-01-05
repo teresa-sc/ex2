@@ -1,7 +1,7 @@
 import torch
 import click
 from torch import nn
-from model import myawesomemodel
+from models.model import myawesomemodel
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 @click.group()
@@ -14,7 +14,7 @@ def cli():
 @click.option("--lr", default=1e-3, help="learning rate to use for training")
 @click.option("--batch_size", default=256, help="batch size to use for training")
 @click.option("--num_epochs", default=20, help="number of epochs to train for")
-@click.option("--path_save", default="ex2/models/model.pt", help="path to save trained model")
+#@click.option("--path_save", default="ex2/models/model.pt", help="path to save trained model")
 def train(lr, batch_size, num_epochs):
     """Train a model on MNIST."""
     print("Training day and night")
@@ -23,7 +23,7 @@ def train(lr, batch_size, num_epochs):
 
     # TODO: Implement training loop here
     model = myawesomemodel.to(device)
-    train_set, _ = torch.load("data/processed/train_imaget.pt")
+    train_set = torch.load("data/processed/train_images.pt")
     train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=batch_size)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
@@ -41,4 +41,10 @@ def train(lr, batch_size, num_epochs):
             optimizer.step()
         print(f"Epoch {epoch} Loss {loss}")
 
-    torch.save(model, "ex2/model/model.pt")
+    torch.save(model, "ex2/models/model.pt")
+
+cli.add_command(train)
+
+if __name__ == '__main__':
+    # Get the data and process it
+    cli()

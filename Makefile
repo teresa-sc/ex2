@@ -42,7 +42,7 @@ data: requirements
 
 ## Run Training
 train: requirements
-	$(PYTHON_INTERPRETER) $(PROJECT_NAME)/train_model.py --path_save $(PROJECT_NAME)/models/training1/model.pt
+	$(PYTHON_INTERPRETER) $(PROJECT_NAME)/train_model.py train
 
 #################################################################################
 # Documentation RULES                                                           #
