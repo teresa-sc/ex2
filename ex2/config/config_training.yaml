@@ -1,0 +1,5 @@
+lr : 1e-3
+batch_size: 64
+num_epochs: 20
+seed: 42
+dataset_path: "/home/teresa/courses/ex2/data/processed/train_images.pt"

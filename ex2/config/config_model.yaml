@@ -1,0 +1,6 @@
+filter_size : 3
+num_filters_lay1 : 32
+num_filters_lay2 : 64
+flatten_dim : 12
+out_dim : 10
+seed: 42

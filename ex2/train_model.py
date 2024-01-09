@@ -1,35 +1,25 @@
 import torch
-import click
+import os
+import hydra
 from torch import nn
 from models.model import myawesomemodel
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-@click.group()
-def cli():
-    """Command line interface."""
-    pass
+import logging
+log = logging.getLogger(__name__)
 
-
-@click.command()
-@click.option("--lr", default=1e-3, help="learning rate to use for training")
-@click.option("--batch_size", default=256, help="batch size to use for training")
-@click.option("--num_epochs", default=20, help="number of epochs to train for")
-#@click.option("--path_save", default="ex2/models/model.pt", help="path to save trained model")
-def train(lr, batch_size, num_epochs):
-    """Train a model on MNIST."""
-    print("Training day and night")
-    print(lr)
-    print(batch_size)
-
-    # TODO: Implement training loop here
+@hydra.main(config_path="config", config_name="config_training")
+def train(cfg):
+    torch.manual_seed(cfg.seed)
+    log.info(f"Training with config: {cfg}")
     model = myawesomemodel.to(device)
-    train_set = torch.load("data/processed/train_images.pt")
-    train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=batch_size)
+    train_set = torch.load(cfg.dataset_path)
+    train_dataloader = torch.utils.data.DataLoader(train_set, batch_size=cfg.batch_size)
 
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
+    optimizer = torch.optim.Adam(model.parameters(), lr=cfg.lr)
     loss_fn = nn.CrossEntropyLoss()
 
-    for epoch in range(num_epochs):
+    for epoch in range(cfg.num_epochs):
         for batch in train_dataloader:
             optimizer.zero_grad()
             x, y = batch
@@ -39,12 +29,10 @@ def train(lr, batch_size, num_epochs):
             loss = loss_fn(y_pred, y)
             loss.backward()
             optimizer.step()
-        print(f"Epoch {epoch} Loss {loss}")
+        log.info(f"Epoch {epoch} Loss {loss}")
 
-    torch.save(model, "ex2/models/model.pt")
-
-cli.add_command(train)
+    torch.save(model, f"{os.getcwd()}/trained_model.pt")
+    log.info("Model saved")
 
 if __name__ == '__main__':
-    # Get the data and process it
-    cli()
+    train()
