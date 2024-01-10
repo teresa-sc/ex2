@@ -14,5 +14,3 @@ def test_data():
         assert data.max() <= 1.0, "Data not normalized"
         assert data.min() >= 0.0, "Data not normalized"
     assert len(dataset[:][1].unique()) == 10, "Not all labels are represented in the dataset"
-    
-    

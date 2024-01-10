@@ -31,7 +31,7 @@ class MyAwesomeModel(LightningModule):
             raise ValueError('Expected each sample to have shape [1, 28, 28]')
 
         return self.model(x)
-    
+
     def training_step(self, batch, batch_idx):
         x, y = batch
         y_pred = self.model(x)
@@ -40,6 +40,6 @@ class MyAwesomeModel(LightningModule):
         acc = (y == y_pred.argmax(dim=-1)).float().mean()
         self.log('train_acc', acc)
         return loss
-    
+
     def configure_optimizers(self):
         return self.optimizer

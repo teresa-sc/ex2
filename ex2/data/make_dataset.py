@@ -1,4 +1,4 @@
-import torch 
+import torch
 from torchvision import transforms
 
 def mnist():
@@ -32,4 +32,3 @@ def mnist():
 if __name__ == '__main__':
     # Get the data and process it
     mnist()
-
